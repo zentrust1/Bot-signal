@@ -1,0 +1,31 @@
+name: XAUUSD Signal Bot
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Setiap 5 menit
+  workflow_dispatch:       # Dapat dijalankan secara manual
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Jalankan bot
+        env:
+          TWELVE_API_KEY: ${{ secrets.TWELVE_API_KEY }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python main.py
